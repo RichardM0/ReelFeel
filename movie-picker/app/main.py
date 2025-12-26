@@ -5,9 +5,6 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.components import create_mood_selector, display_recommendations
-from src.mood_classifier import classify_mood
-from src.recommend import get_recommendations
 
 # Configure page
 st.set_page_config(
