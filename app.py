@@ -31,6 +31,9 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# Scroll to top anchor - place at top of page
+st.markdown('<div id="top"></div>', unsafe_allow_html=True)
+
 # Initialize session state for liked movies and navigation
 if "liked_movies" not in st.session_state:
     st.session_state.liked_movies = []
@@ -40,6 +43,13 @@ if "page" not in st.session_state:
 
 if "selected_movie_id" not in st.session_state:
     st.session_state.selected_movie_id = None
+
+if "last_page" not in st.session_state:
+    st.session_state.last_page = "home"
+
+# Helper function to change page and scroll to top
+def scroll_to_top():
+    st.markdown('<script>window.scrollTo(0, 0); document.documentElement.scrollTop = 0;</script>', unsafe_allow_html=True)
 
 # Function to load poster image from URL
 @st.cache_data
@@ -226,22 +236,22 @@ def display_home():
 with st.sidebar:
     st.title("Navigation")
     
-    # Create navigation buttons
-    col1, col2, col3 = st.columns(3)
+    # Create navigation buttons in single column for full width
+    if st.button("🏠 Home", use_container_width=True, key="nav_home"):
+        st.session_state.page = "home"
+        st.rerun()
     
-    with col1:
-        if st.button("🏠 Home", use_container_width=True, key="nav_home"):
-            st.session_state.page = "home"
+    if st.button("❤️ Liked", use_container_width=True, key="nav_liked"):
+        st.session_state.page = "liked"
+        st.rerun()
     
-    with col2:
-        if st.button("❤️ Liked", use_container_width=True, key="nav_liked"):
-            st.session_state.page = "liked"
-    
-    with col3:
-        if st.button("🔍 Search", use_container_width=True, key="nav_search"):
-            st.session_state.page = "search"
+    if st.button("🔍 Search", use_container_width=True, key="nav_search"):
+        st.session_state.page = "search"
+        st.rerun()
     
     st.divider()
+    
+    # Liked movies section
     st.write(f"📌 Liked Movies: {len(st.session_state.liked_movies)}")
     
     if st.session_state.liked_movies:
@@ -252,19 +262,52 @@ with st.sidebar:
                 title = movie.iloc[0]["title"]
                 st.write(f"• {title}")
 
-# Main page routing
+# Scroll to top anchor - place at top of page
+st.markdown('<div id="top"></div>', unsafe_allow_html=True)
+
+# Main page routing with scroll to top
 if st.session_state.page == "home":
+    st.markdown("""
+    <script>
+        window.parent.document.querySelector("section").scrollTop = 0;
+        window.scrollTo(0, 0);
+    </script>
+    """, unsafe_allow_html=True)
     display_home()
 elif st.session_state.page == "movie_detail":
+    st.markdown("""
+    <script>
+        window.parent.document.querySelector("section").scrollTop = 0;
+        window.scrollTo(0, 0);
+    </script>
+    """, unsafe_allow_html=True)
     if st.session_state.selected_movie_id:
         display_movie_detail(st.session_state.selected_movie_id)
     else:
         st.session_state.page = "home"
 elif st.session_state.page == "liked":
+    st.markdown("""
+    <script>
+        window.parent.document.querySelector("section").scrollTop = 0;
+        window.scrollTo(0, 0);
+    </script>
+    """, unsafe_allow_html=True)
     display_liked_movies()
 elif st.session_state.page == "similar_recommendations":
+    st.markdown("""
+    <script>
+        window.parent.document.querySelector("section").scrollTop = 0;
+        window.scrollTo(0, 0);
+    </script>
+    """, unsafe_allow_html=True)
     display_similar_recommendations()
 elif st.session_state.page == "search":
+    st.markdown("""
+    <script>
+        window.parent.document.querySelector("section").scrollTop = 0;
+        window.scrollTo(0, 0);
+    </script>
+    """, unsafe_allow_html=True)
     display_search()
 else:
     st.session_state.page = "home"
