@@ -80,7 +80,9 @@ def display_movie_grid(movies, cols=5, clickable=True, key_prefix=""):
                 else:
                     st.write("No Poster Available")
                 
-                st.write(f"**{movie['title'][:20]}...**" if len(movie['title']) > 20 else f"**{movie['title']}**")
+                # Create a fixed-height container for the title to maintain vertical alignment
+                with st.container(height=80, border=False):
+                    st.write(f"**{movie['title'][:20]}...**" if len(movie['title']) > 20 else f"**{movie['title']}**")
                 
                 if clickable:
                     if st.button("View Details", key=f"{key_prefix}view_{movie['id']}_{movie_index}", use_container_width=True):
