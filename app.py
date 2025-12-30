@@ -9,6 +9,15 @@ from io import BytesIO
 # Set page config
 st.set_page_config(page_title="ReelSense", layout="wide", initial_sidebar_state="expanded")
 
+# Add custom CSS to prevent text wrapping in buttons
+st.markdown("""
+    <style>
+        button {
+            white-space: nowrap;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Initialize session state for liked movies and navigation
 if "liked_movies" not in st.session_state:
     st.session_state.liked_movies = []
