@@ -9,11 +9,24 @@ from io import BytesIO
 # Set page config
 st.set_page_config(page_title="ReelSense", layout="wide", initial_sidebar_state="expanded")
 
-# Add custom CSS to prevent text wrapping in buttons
+# Add custom CSS to prevent text wrapping in buttons and handle responsive layout
 st.markdown("""
     <style>
+        /* Prevent button text from wrapping */
         button {
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Make main content responsive */
+        .main {
+            width: 100%;
+        }
+        
+        /* Responsive layout */
+        [data-testid="stAppViewContainer"] {
+            max-width: 100%;
         }
     </style>
     """, unsafe_allow_html=True)
