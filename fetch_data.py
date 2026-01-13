@@ -28,4 +28,4 @@ def fetch_movies(pages):
     print("Saved movies.csv!")
 
 if __name__ == "__main__":
-    fetch_movies(pages=100)
+    fetch_movies(pages=200)
