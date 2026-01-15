@@ -5,9 +5,7 @@ from recommend import movies_df, similarity_matrix
 
 
 def get_ranked_indices(movie_idx):
-    input_genres = set(
-        ast.literal_eval(movies_df["genre_ids"].iloc[movie_idx])
-    )
+    input_genres = set(eval(movies_df["genre_ids"].iloc[movie_idx]))
 
     sim_scores = similarity_matrix[movie_idx]
     ranked = []
@@ -16,9 +14,7 @@ def get_ranked_indices(movie_idx):
         if i == movie_idx:
             continue
 
-        candidate_genres = set(
-            ast.literal_eval(movies_df["genre_ids"].iloc[i])
-        )
+        candidate_genres = set(eval(movies_df["genre_ids"].iloc[i]))
 
         if candidate_genres & input_genres:
             ranked.append(i)
@@ -26,10 +22,8 @@ def get_ranked_indices(movie_idx):
     return np.array(ranked)
 
 
-def get_relevant_movies(movie_idx, similarity_threshold=0.3):
-    input_genres = set(
-        ast.literal_eval(movies_df["genre_ids"].iloc[movie_idx])
-    )
+def get_relevant_movies(movie_idx, similarity_threshold=0.1):
+    input_genres = set(eval(movies_df["genre_ids"].iloc[movie_idx]))
     sim_scores = similarity_matrix[movie_idx]
 
     relevant = set()
@@ -38,9 +32,7 @@ def get_relevant_movies(movie_idx, similarity_threshold=0.3):
         if i == movie_idx:
             continue
 
-        candidate_genres = set(
-            ast.literal_eval(movies_df["genre_ids"].iloc[i])
-        )
+        candidate_genres = set(eval(movies_df["genre_ids"].iloc[i]))
 
         if score > similarity_threshold and candidate_genres & input_genres:
             relevant.add(i)
@@ -73,7 +65,7 @@ def average_precision(ranked_indices, relevant):
 
     return score / len(relevant)
 
-def evaluate_recommender(k=5, similarity_threshold=0.3, num_samples=100):
+def evaluate_recommender(k=5, similarity_threshold=0.1, num_samples=100):
     precisions = []
     recalls = []
     aps = []
@@ -102,4 +94,6 @@ if __name__ == "__main__":
         similarity_threshold=0.1,
         num_samples=100
     )
-    print(results)
+    F1 = (2*results['Precision@K'] * results['Recall@K'])/(results['Precision@K'] + results['Recall@K'])
+    print("F1 score:", F1)
+    print("MAP:", results["MAP"])

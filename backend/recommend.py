@@ -41,7 +41,7 @@ moods = {
 }
 
 # read in movies data from csv
-movies_df = pd.read_csv("movies.csv")
+movies_df = pd.read_csv("data/movies.csv")
 # create a score column to rank movies by mood later on
 movies_df["score"] = movies_df["popularity"] * 0.4 + movies_df["vote_avg"] * 0.6
 
@@ -57,6 +57,7 @@ def get_similar_movies(movie_id, top_n):
     
     # create set of genre ids for the input movie
     input_genres = set(eval(movies_df["genre_ids"].iloc[idx]))
+    input_keywords = set(eval(movies_df["keywords"].iloc[idx]))
     
     # get similarity scores
     sim_scores = similarity_matrix[idx]
@@ -74,10 +75,12 @@ def get_similar_movies(movie_id, top_n):
         for i in similar_indices:
             # create set of genre ids for candidate movie
             candidate_genres = set(eval(movies_df["genre_ids"].iloc[i]))
+            candidate_keywords = set(eval(movies_df["keywords"].iloc[i]))
             # check if the candidate and the input movie share at least one genre
-            hasShared = bool(candidate_genres & input_genres)
+            hasSharedGenres = bool(candidate_genres & input_genres)
+            hasSharedKeywords = bool(candidate_keywords & input_keywords) or (len(input_keywords)==0)
             # if the id has not been seen, add it
-            if movies_df["id"].iloc[i] not in ids and hasShared:
+            if movies_df["id"].iloc[i] not in ids and hasSharedGenres and hasSharedKeywords:
                 ids.append(movies_df["id"].iloc[i])
                 top_n_indices.append(i)
             # break if we have enough movies
@@ -98,7 +101,3 @@ def get_all_similar_movies(movie_ids, top_n):
     return all_movies
 
 test_case = get_all_similar_movies(movies_df["id"].iloc[0:3], 5)
-
-
-
-

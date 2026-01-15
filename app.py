@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from recommend import get_similar_movies, get_all_similar_movies, movies_df
+from backend.recommend import get_similar_movies, get_all_similar_movies, movies_df
 from PIL import Image
 import requests
 from io import BytesIO
